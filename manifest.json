@@ -1,0 +1,24 @@
+{
+  "name": "+Grooupy!",
+  "version": "1.1",
+  "description": "It adds URL of tweet to Grooupy(https://grooupy.herokuapp.com/).",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "page_action" :
+  {
+    "default_icon" : "icon-19.png",
+    "default_title" : "Add this tweet."
+  },
+  "permissions" : [
+    "contextMenus",
+    "declarativeContent", "tabs",
+    "https://grooupy.herokuapp.com/"
+  ],
+  "icons" : {
+    "48" : "icon-48.png",
+    "128" : "icon-128.png"
+  },
+  "manifest_version": 2
+}
