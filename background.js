@@ -46,7 +46,7 @@ function addUrlToGrooupy(url) {
       }
       else {
         //もしもうGrooupyを開いていたらそこにツイートのURLを追加
-        chrome.tabs.update(c_window_id, add_url_func);
+        chrome.tabs.update(g_tab[0].id, {}, add_url_func);
       }
     });
   });
