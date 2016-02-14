@@ -63,3 +63,49 @@ function addThisTabToGrooupy() {
 //アイコンがクリックされた際の動作
 chrome.pageAction.onClicked.addListener(addThisTabToGrooupy);
 
+//コンテキストメニューのクラス
+var ContextMenus = new function () {
+    var items = {};
+    var callbacks = {};
+
+    //メニューアイテムの追加
+    this.setItems = function (aItems) {
+        aItems.forEach(function (item) {
+            callbacks[item.id] = item.onclick;
+            item.onclick = null;
+            items[item.id] = item;
+        });
+    };
+
+    //メニューアイテムの登録
+    this.create = function () {
+        Object.keys(items).forEach(
+            function (key) {
+                chrome.contextMenus.create(items[key]);
+            }
+        );
+    };
+
+    //イベント登録
+    chrome.contextMenus.onClicked.addListener(function (info, tab) {
+        callbacks[info.menuItemId](info, tab);
+    });
+};
+
+ContextMenus.setItems([
+    {
+        id: 'p-grp1',
+        title: "今開いているツイートをGrooupyに追加",
+        contexts: ["page"],
+        onclick: addThisTabToGrooupy,
+        documentUrlPatterns: ["https://twitter.com/*/status/*"]
+    }, {
+        id: 'p-grp2',
+        title: "リンク先のツイートをGrooupyに追加",
+        contexts: ["link"],
+        onclick: function(info){ return addUrlToGrooupy(info["linkUrl"]); },
+        targetUrlPatterns: ["https://twitter.com/*/status/*"]
+    }
+]);
+
+chrome.runtime.onInstalled.addListener(ContextMenus.create);
